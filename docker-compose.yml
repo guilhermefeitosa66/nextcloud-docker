@@ -30,7 +30,7 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - /home/guilherme/Insync/guilhermefeitosa66@gmail.com/OneDrive/nextcloud:/var/www/html
+      - ${NEXTCLOUD_DATA_PATH}:/var/www/html
     environment:
       - MYSQL_HOST=db
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}

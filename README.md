@@ -11,18 +11,19 @@ Configuração do Nextcloud usando Docker Compose com MariaDB e Redis.
 
 ### 1. Configurar variáveis de ambiente
 
-Edite o arquivo `.env` e altere as senhas padrão:
+Copie o arquivo `.env.example` para `.env` e edite com suas configurações:
 
 ```bash
+cp .env.example .env
 nano .env
 ```
 
-**IMPORTANTE:** Altere todas as senhas antes de iniciar em produção!
+**IMPORTANTE:** Altere todas as senhas e o caminho `NEXTCLOUD_DATA_PATH` antes de iniciar!
 
 ### 2. Iniciar os containers
 
 ```bash
-docker-compose up -d
+make up
 ```
 
 ### 3. Acessar o Nextcloud
@@ -33,36 +34,38 @@ Abra o navegador e acesse:
 http://localhost:8080
 ```
 
-Faça login com as credenciais definidas no arquivo `.env`:
-- Usuário: `admin` (ou o valor de NEXTCLOUD_ADMIN_USER)
-- Senha: `adminNextcloud123` (ou o valor de NEXTCLOUD_ADMIN_PASSWORD)
+Faça login com as credenciais definidas no arquivo `.env`.
 
 ## Comandos Úteis
 
-### Ver logs
+Para ver todos os comandos disponíveis:
 ```bash
-docker-compose logs -f
+make help
 ```
 
-### Parar os containers
+### Gerenciamento de containers
 ```bash
-docker-compose down
+make up          # Iniciar containers
+make down        # Parar containers
+make restart     # Reiniciar containers
+make ps          # Ver status dos containers
 ```
 
-### Parar e remover volumes (CUIDADO: remove todos os dados)
+### Logs
 ```bash
-docker-compose down -v
+make logs        # Ver logs de todos os serviços
+make logs-app    # Logs apenas do Nextcloud
+make logs-db     # Logs apenas do MariaDB
+make logs-redis  # Logs apenas do Redis
 ```
 
-### Reiniciar os containers
+### Manutenção
 ```bash
-docker-compose restart
-```
-
-### Atualizar o Nextcloud
-```bash
-docker-compose pull
-docker-compose up -d
+make update            # Atualizar imagens e reiniciar
+make backup            # Fazer backup dos dados
+make clean             # Remover tudo (DESTRUTIVO)
+make shell-app         # Abrir shell no container
+make fix-permissions   # Corrigir permissões
 ```
 
 ## Estrutura
@@ -73,17 +76,8 @@ docker-compose up -d
 
 ## Volumes
 
-- `nextcloud_data`: Dados do Nextcloud (arquivos, apps, configurações)
-- `db_data`: Dados do banco de dados MariaDB
-
-## Backup
-
-Para fazer backup dos dados:
-
-```bash
-docker run --rm -v nextcloud_nextcloud_data:/data -v $(pwd):/backup ubuntu tar czf /backup/nextcloud-backup.tar.gz /data
-docker run --rm -v nextcloud_db_data:/data -v $(pwd):/backup ubuntu tar czf /backup/db-backup.tar.gz /data
-```
+- **NEXTCLOUD_DATA_PATH**: Dados do Nextcloud (arquivos, apps, configurações) - definido no `.env`
+- **db_data**: Dados do banco de dados MariaDB (volume Docker)
 
 ## Problemas Comuns
 
@@ -99,5 +93,5 @@ ports:
 ### Erro de permissões
 
 ```bash
-docker-compose exec app chown -R www-data:www-data /var/www/html
+make fix-permissions
 ```
