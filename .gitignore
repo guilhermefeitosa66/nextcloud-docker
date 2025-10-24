@@ -1,3 +1,6 @@
+# Force include CLAUDE.md (override global gitignore)
+!CLAUDE.md
+
 # Environment variables (contains sensitive credentials)
 .env
 
