@@ -1,0 +1,31 @@
+# Environment variables (contains sensitive credentials)
+.env
+
+# Docker volumes and data
+db_data/
+nextcloud_data/
+
+# Nextcloud data directory (synced to OneDrive)
+# This is the actual Nextcloud installation and user files
+/home/guilherme/Insync/
+
+# System files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE files
+.vscode/
+.idea/
+*.iml
+
+# Backup files
+*.tar.gz
+*.backup
+nextcloud-backup.tar.gz
+db-backup.tar.gz
+
+# Logs
+*.log
